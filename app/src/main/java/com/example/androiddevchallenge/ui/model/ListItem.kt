@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androiddevchallenge.ui.theme
+package com.example.androiddevchallenge.ui.model
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 
-val AppShapes = Shapes(
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(24.dp)
+data class ListItem(
+    var id: Int,
+    var name: String,
+    var selected: MutableState<Boolean> = mutableStateOf(false)
 )

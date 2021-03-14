@@ -18,44 +18,62 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.components.Home
+import com.example.androiddevchallenge.ui.components.LogIn
+import com.example.androiddevchallenge.ui.components.Welcome
+import com.example.androiddevchallenge.ui.theme.AppTheme
+import com.example.androiddevchallenge.ui.utils.Helper.HOME
+import com.example.androiddevchallenge.ui.utils.Helper.LOGIN
+import com.example.androiddevchallenge.ui.utils.Helper.WELCOME
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyTheme {
-                MyApp()
+            val screen = remember { mutableStateOf(WELCOME) }
+            val dark = remember { mutableStateOf(true) }
+            AppTheme(darkTheme = dark.value) {
+                MyApp(screen, dark = dark.value)
             }
         }
     }
 }
 
 // Start building your app here!
+
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+fun MyApp(screen: MutableState<Int>, dark: Boolean) {
+    when (screen.value) {
+        WELCOME -> Welcome(
+            dark = dark,
+            logIn = { screen.value = LOGIN }
+        )
+        LOGIN -> LogIn(
+            logIn = { screen.value = HOME }
+        )
+        else -> Home(
+            dark = dark
+        )
     }
 }
 
 @Preview("Light Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun LightPreview() {
-    MyTheme {
-        MyApp()
+    AppTheme(darkTheme = false) {
+        MyApp(mutableStateOf(HOME), false)
     }
 }
 
 @Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+    AppTheme(darkTheme = true) {
+        MyApp(mutableStateOf(HOME), true)
     }
 }
